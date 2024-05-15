@@ -28,14 +28,53 @@ type ClusterScanSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of ClusterScan. Edit clusterscan_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	//+kubebuilder:validation:MinLength=0
+
+	// The version of the cluster. I'm not exactly sure how cluster
+	// versions work so this will always be "v1".
+	Version string `json:"version"`
+
+	//+kubebuilder:validation:Minimum=0
+
+	// The name of the cluster. Again, not sure if clusters have names but seems useful to have in a scan.
+	Name string `json:"name,omitempty"`
+
+	//+kubebuilder:validation:MinLength=0
+
+	// list of nodes (create a new type for this shit)
+	Nodes []Node `json:"nodes"`
 }
+
+// Struct representing a
+type Node struct {
+	Name         string
+	UID          int32
+	NumberOfPods int32
+	Master       bool
+	Status       NodeStatus
+}
+
+// NodeStatus describes the status of a node. Only one of the given statuses can be specified.
+// +kubebuilder:validation:Enum=Active;Inactive;Error
+type NodeStatus string
+
+const (
+	// The node is active.
+	ActiveStatus NodeStatus = "Active"
+
+	// The node is inactive.
+	InactiveStatus NodeStatus = "Inactive"
+
+	// The node has encountered an error of some sort.
+	ErrorStatus NodeStatus = "Error"
+)
 
 // ClusterScanStatus defines the observed state of ClusterScan
 type ClusterScanStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+
+	// Not sure what observed state I would record here since I just log the data collected in the ClusterScan.
 }
 
 //+kubebuilder:object:root=true
