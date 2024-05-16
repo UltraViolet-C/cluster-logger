@@ -74,7 +74,7 @@ type ClusterScanStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Not sure what observed state I would record here since I just log the data collected in the ClusterScan.
+	// Note: Not sure what observed state I would record here since I just log the data collected in the ClusterScan.
 }
 
 //+kubebuilder:object:root=true
