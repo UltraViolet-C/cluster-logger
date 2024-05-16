@@ -45,7 +45,7 @@ type ClusterScanSpec struct {
 	Nodes []Node `json:"nodes"`
 }
 
-// Struct representing a
+// Struct representing a node.
 type Node struct {
 	//+kubebuilder:validation:MinLength=0
 	Name         string     `json:"name"`
