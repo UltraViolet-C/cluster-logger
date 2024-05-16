@@ -34,12 +34,12 @@ type ClusterScanSpec struct {
 	// versions work so this will always be "v1".
 	Version string `json:"version"`
 
-	//+kubebuilder:validation:Minimum=0
+	//+kubebuilder:validation:MinLength=0
 
 	// The name of the cluster. Again, not sure if clusters have names but seems useful to have in a scan.
 	Name string `json:"name,omitempty"`
 
-	//+kubebuilder:validation:MinLength=0
+	//+kubebuilder:validation:MinItems=0
 
 	// list of nodes (create a new type for this shit)
 	Nodes []Node `json:"nodes"`
@@ -47,11 +47,12 @@ type ClusterScanSpec struct {
 
 // Struct representing a
 type Node struct {
-	Name         string
-	UID          int32
-	NumberOfPods int32
-	Master       bool
-	Status       NodeStatus
+	//+kubebuilder:validation:MinLength=0
+	Name         string     `json:"name"`
+	UID          int32      `json:"uid"`
+	NumberOfPods int32      `json:"numberOfPods"`
+	Master       bool       `json:"master"`
+	Status       NodeStatus `json:"status"`
 }
 
 // NodeStatus describes the status of a node. Only one of the given statuses can be specified.
