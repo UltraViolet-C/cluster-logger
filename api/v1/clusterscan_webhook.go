@@ -17,7 +17,10 @@ limitations under the License.
 package v1
 
 import (
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/util/validation/field"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
@@ -61,22 +64,44 @@ var _ webhook.Validator = &ClusterScan{}
 func (r *ClusterScan) ValidateCreate() (admission.Warnings, error) {
 	clusterscanlog.Info("validate create", "name", r.Name)
 
-	// TODO(user): fill in your validation logic upon object creation.
-	return nil, nil
+	return nil, r.validateClusterScan()
 }
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (r *ClusterScan) ValidateUpdate(old runtime.Object) (admission.Warnings, error) {
 	clusterscanlog.Info("validate update", "name", r.Name)
 
-	// TODO(user): fill in your validation logic upon object update.
-	return nil, nil
+	return nil, r.validateClusterScan()
 }
 
 // ValidateDelete implements webhook.Validator so a webhook will be registered for the type
 func (r *ClusterScan) ValidateDelete() (admission.Warnings, error) {
 	clusterscanlog.Info("validate delete", "name", r.Name)
 
-	// TODO(user): fill in your validation logic upon object deletion.
+	// no need to validate the scan on delete
 	return nil, nil
+}
+
+func (r *ClusterScan) validateClusterScan() error {
+	var allErrs field.ErrorList
+	if err := r.validateClusterScanSpec(); err != nil {
+		allErrs = append(allErrs, err)
+	}
+	if len(allErrs) == 0 {
+		return nil
+	}
+
+	return apierrors.NewInvalid(
+		schema.GroupKind{Group: "log.my.domain", Kind: "ClusterScan"},
+		r.Name, allErrs)
+}
+
+func (r *ClusterScan) validateClusterScanSpec() *field.Error {
+	// check if version is correctly formatted. For the purpose of this tool, it will just check that it is "v1"
+	if r.Spec.Version != "v1" {
+		return field.Invalid(field.NewPath("spec").Child("name"), r.Spec.Version, "Incorrect scan version")
+	}
+	// in a more fleshed out tool, this would validate the full clusterScan but since the scan does not actually represent
+	// anything, I just validate the version string.
+	return nil
 }
