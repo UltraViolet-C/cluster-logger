@@ -6,4 +6,16 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: clusterscan-sample
 spec:
-  # TODO(user): Add fields here
+  version: "v1"
+  name: "testClusterScan"
+  nodes:
+  - name: "masterNode"
+    uid: 123
+    numberOfPods: 3
+    master: True
+    status: Active
+  - name: "regularNode"
+    uid: 321
+    numberOfPods: 2
+    master: False
+    status: Active
