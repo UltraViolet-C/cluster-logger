@@ -47,7 +47,7 @@ spec:
               nodes:
                 description: list of nodes (create a new type for this shit)
                 items:
-                  description: Struct representing a
+                  description: Struct representing a node.
                   properties:
                     master:
                       type: boolean
