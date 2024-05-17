@@ -126,7 +126,7 @@ func (r *ClusterScanReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 		name := fmt.Sprintf("clusterscanlog-%d", time.Now().Unix())
 
 		// make a string here with the pretty printed representation of our nodes
-		// and feed it into the Job's Command field and we're done! :D
+		// and feed it into the Job's Command field :D
 
 		job := &kbatch.Job{
 			ObjectMeta: metav1.ObjectMeta{
